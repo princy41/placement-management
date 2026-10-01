@@ -46,10 +46,9 @@ function StudentForm({ onStudentAdded }) {
           Number(formData.graduationYear),
       };
 
-      const response = await axios.post(
-        "http://localhost:5000/api/students",
-        student
-      );
+      
+        const response = await api.post("/students", formData);
+        
 
       onStudentAdded(response.data);
 
