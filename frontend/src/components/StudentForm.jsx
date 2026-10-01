@@ -1,8 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 function StudentForm({ onStudentAdded }) {
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,28 +12,20 @@ function StudentForm({ onStudentAdded }) {
   });
 
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     try {
-
       const student = {
-
         name: formData.name,
-
         email: formData.email,
-
         phone: formData.phone,
-
         course: formData.course,
 
         skills: formData.skills
@@ -42,13 +33,14 @@ function StudentForm({ onStudentAdded }) {
           .map((skill) => skill.trim())
           .filter(Boolean),
 
-        graduationYear:
-          Number(formData.graduationYear),
+        graduationYear: Number(formData.graduationYear),
       };
 
-      
-        const response = await api.post("/students", formData);
-        
+      console.log("Sending student:", student);
+
+      const response = await api.post("/students", student);
+
+      console.log("Student added:", response.data);
 
       onStudentAdded(response.data);
 
@@ -61,21 +53,20 @@ function StudentForm({ onStudentAdded }) {
         graduationYear: "",
       });
 
-    } catch (error) {
+      alert("Student added successfully!");
 
-      console.error(error);
+    } catch (error) {
+      console.error("Add student error:", error);
+      console.error("Server response:", error.response?.data);
 
       alert(
         error.response?.data?.message ||
         "Failed to add student"
       );
-
     }
-
   };
 
   return (
-
     <div className="form-card">
 
       <div className="form-title">
@@ -99,7 +90,6 @@ function StudentForm({ onStudentAdded }) {
         <div className="form-grid">
 
           <div className="input-group">
-
             <label>Full Name</label>
 
             <input
@@ -109,11 +99,9 @@ function StudentForm({ onStudentAdded }) {
               onChange={handleChange}
               required
             />
-
           </div>
 
           <div className="input-group">
-
             <label>Email</label>
 
             <input
@@ -124,11 +112,9 @@ function StudentForm({ onStudentAdded }) {
               onChange={handleChange}
               required
             />
-
           </div>
 
           <div className="input-group">
-
             <label>Phone</label>
 
             <input
@@ -137,11 +123,9 @@ function StudentForm({ onStudentAdded }) {
               value={formData.phone}
               onChange={handleChange}
             />
-
           </div>
 
           <div className="input-group">
-
             <label>Course</label>
 
             <input
@@ -150,11 +134,9 @@ function StudentForm({ onStudentAdded }) {
               value={formData.course}
               onChange={handleChange}
             />
-
           </div>
 
           <div className="input-group">
-
             <label>Skills</label>
 
             <input
@@ -163,11 +145,9 @@ function StudentForm({ onStudentAdded }) {
               value={formData.skills}
               onChange={handleChange}
             />
-
           </div>
 
           <div className="input-group">
-
             <label>Graduation Year</label>
 
             <input
@@ -177,7 +157,6 @@ function StudentForm({ onStudentAdded }) {
               value={formData.graduationYear}
               onChange={handleChange}
             />
-
           </div>
 
         </div>
@@ -192,7 +171,6 @@ function StudentForm({ onStudentAdded }) {
       </form>
 
     </div>
-
   );
 }
 
